@@ -8,10 +8,23 @@ SHUNIT_PARENT=$0
 # Use system Spaceship or fallback to Spaceship Docker on CI
 typeset -g SPACESHIP_ROOT="${SPACESHIP_ROOT:=/spaceship}"
 
-# Mocked tool CLI
-mocked_version="v1.0.0-mocked"
-foobar() {
-  echo "$mocked_version"
+# Mocked jj CLI
+mocked_bookmark="main"
+jj() {
+  case "$1" in
+    "status")
+      if [[ -f "$SHUNIT_TMPDIR/.jj/store" ]]; then
+        echo "The working copy has no changes."
+        echo "Working copy  (@) : twnxwzvz 0d609da9 $mocked_bookmark* | (empty) (no description set)"
+        echo "Parent commit (@-): mmspsltm f0918114 Updates README"
+      else
+        return 1
+      fi
+      ;;
+    *)
+      return 1
+      ;;
+  esac
 }
 
 # ------------------------------------------------------------------------------
@@ -32,7 +45,7 @@ oneTimeSetUp() {
   SPACESHIP_PROMPT_ASYNC=false
   SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=true
   SPACESHIP_PROMPT_ADD_NEWLINE=false
-  SPACESHIP_PROMPT_ORDER=(foobar)
+  SPACESHIP_PROMPT_ORDER=(jj)
 
   echo "Spaceship version: $(spaceship --version)"
 }
@@ -55,18 +68,19 @@ test_incorrect_env() {
   assertEquals "do not render system version" "$expected" "$actual"
 }
 
-test_mocked_version() {
-  # Prepare the environment
-  touch $SHUNIT_TMPDIR/test.foo
+test_mocked_jj_status() {
+  # Prepare the environment - create mock .jj directory
+  mkdir -p $SHUNIT_TMPDIR/.jj
+  touch $SHUNIT_TMPDIR/.jj/store
 
-  local prefix="%{%B%}$SPACESHIP_FOOBAR_PREFIX%{%b%}"
-  local content="%{%B%F{$SPACESHIP_FOOBAR_COLOR}%}$SPACESHIP_FOOBAR_SYMBOL$mocked_version%{%b%f%}"
-  local suffix="%{%B%}$SPACESHIP_FOOBAR_SUFFIX%{%b%}"
+  local prefix="%{%B%}$SPACESHIP_JJ_PREFIX%{%b%}"
+  local content="%{%B%F{$SPACESHIP_JJ_COLOR}%}$SPACESHIP_JJ_SYMBOL$mocked_bookmark%{%b%f%}"
+  local suffix="%{%B%}$SPACESHIP_JJ_SUFFIX%{%b%}"
 
   local expected="$prefix$content$suffix"
   local actual="$(spaceship::testkit::render_prompt)"
 
-  assertEquals "render mocked version" "$expected" "$actual"
+  assertEquals "render mocked jj status" "$expected" "$actual"
 }
 
 # ------------------------------------------------------------------------------

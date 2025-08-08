@@ -31,7 +31,7 @@
   </a>
 </p>
 
-Current JJ version, through jj (`😍`).
+Current JJ bookmark/branch status, through jj (`😍`).
 
 ## Installing
 
@@ -110,23 +110,28 @@ source "~/.zsh/spaceship-section/spaceship-section.plugin.zsh"
 
 ## Usage
 
-After installing, add the following line to your `.zshrc` in order to include Ember section in the prompt:
+After installing, add the following line to your `.zshrc` in order to include JJ section in the prompt:
 
 ```zsh
-spaceship add foobar
+spaceship add jj
 ```
 
 ## Options
 
-This section is shown only in directories within a foobar context.
+This section is shown only in directories within a JJ repository (containing a `.jj` directory).
 
-| Variable              |              Default               | Meaning                              |
-| :-------------------- | :--------------------------------: | ------------------------------------ |
-| `SPACESHIP_JJ_SHOW`   |               `true`               | Show current section                 |
-| `SPACESHIP_JJ_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before section                |
-| `SPACESHIP_JJ_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after section                 |
-| `SPACESHIP_JJ_SYMBOL` |               `😍·`                | Character to be shown before version |
-| `SPACESHIP_JJ_COLOR`  |              `yellow`              | Color of section                     |
+| Variable              |              Default               | Meaning                                    |
+| :-------------------- | :--------------------------------: | ------------------------------------------ |
+| `SPACESHIP_JJ_SHOW`   |               `true`               | Show current section                       |
+| `SPACESHIP_JJ_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before section                      |
+| `SPACESHIP_JJ_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after section                       |
+| `SPACESHIP_JJ_SYMBOL` |               `😍 `                | Character to be shown before bookmark      |
+| `SPACESHIP_JJ_COLOR`  |              `yellow`              | Color of section                           |
+
+The section displays:
+- Current bookmark/branch name
+- `*` suffix if working copy has changes
+- `!` suffix if there are conflicts
 
 ## Contributing
 
